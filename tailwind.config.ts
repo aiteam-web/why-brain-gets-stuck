@@ -63,27 +63,40 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      fontFamily: {
+        sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'system-ui', 'sans-serif'],
+      },
+      fontSize: {
+        body: ['15px', { lineHeight: '1.6' }],
+        title: ['22px', { lineHeight: '1.3', fontWeight: '700' }],
+        badge: ['11px', { lineHeight: '1', fontWeight: '600', letterSpacing: '0.05em' }],
+      },
+      colors: {
+        hint: "hsl(var(--hint))",
+      },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        breathe: {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.12)" },
+        },
+        fadeUp: {
+          from: { opacity: "0", transform: "translateY(10px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        breathe: "breathe 4s ease-in-out infinite",
+        fadeUp: "fadeUp 0.4s ease-out forwards",
       },
     },
   },
