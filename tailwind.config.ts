@@ -72,9 +72,6 @@ export default {
         title: ['22px', { lineHeight: '1.3', fontWeight: '700' }],
         badge: ['11px', { lineHeight: '1', fontWeight: '600', letterSpacing: '0.05em' }],
       },
-      colors: {
-        hint: "hsl(var(--hint))",
-      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
