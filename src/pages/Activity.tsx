@@ -127,7 +127,7 @@ const Screen2 = ({ onBack }: { onBack: () => void }) => {
   ];
 
   return (
-    <div className="flex flex-col px-6 pt-16 pb-4 h-full overflow-y-auto">
+    <div className="flex flex-col px-6 pt-16 pb-4 h-full overflow-y-auto scrollbar-hide">
       <div className="max-w-sm w-full mx-auto">
         <div className="flex justify-center">
           <span
@@ -202,7 +202,10 @@ const Activity = () => {
   };
 
   const handleBack = () => {
-    if (screen === 0) return;
+    if (screen === 0) {
+      // Exit activity - could navigate away or do nothing for now
+      return;
+    }
     goTo(screen - 1);
   };
 
@@ -211,7 +214,7 @@ const Activity = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
-      <div className="relative w-full max-w-[390px] h-[100dvh] max-h-[844px] overflow-hidden flex flex-col bg-background">
+      <div className="relative w-full max-w-[390px] h-[100dvh] max-h-[844px] overflow-hidden flex flex-col bg-background scrollbar-hide">
         <BackButton onClick={handleBack} />
 
         <div className="flex-1 relative overflow-hidden">
