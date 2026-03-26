@@ -16,7 +16,7 @@ const ProgressDots = ({ current, total }: { current: number; total: number }) =>
 const BackButton = ({ onClick }: { onClick: () => void }) => (
   <button
     onClick={onClick}
-    className="absolute top-4 left-4 pt-safe text-muted-foreground text-xl font-light w-10 h-10 flex items-center justify-center rounded-full hover:bg-card transition-colors"
+    className="absolute top-4 left-4 pt-safe text-muted-foreground text-xl font-light w-10 h-10 flex items-center justify-center rounded-full hover:bg-card transition-colors z-50"
     aria-label="Go back"
   >
     ‹
