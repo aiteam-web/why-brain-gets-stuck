@@ -184,28 +184,30 @@ const Screen2 = ({ onBack }: { onBack: () => void }) => {
 
 const Activity = () => {
   const [screen, setScreen] = useState(0);
-  const [direction, setDirection] = useState(0); // -1 left, 1 right
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [displayScreen, setDisplayScreen] = useState(0);
+  const [prevScreen, setPrevScreen] = useState<number | null>(null);
+  const [slideDir, setSlideDir] = useState(1);
+  const [animating, setAnimating] = useState(false);
 
   const goTo = (target: number) => {
-    if (isTransitioning) return;
-    setDirection(target > screen ? 1 : -1);
-    setIsTransitioning(true);
-    setDisplayScreen(target);
+    if (animating) return;
+    const dir = target > screen ? 1 : -1;
+    setSlideDir(dir);
+    setPrevScreen(screen);
+    setScreen(target);
+    setAnimating(true);
     setTimeout(() => {
-      setScreen(target);
-      setIsTransitioning(false);
-    }, 600);
+      setPrevScreen(null);
+      setAnimating(false);
+    }, 620);
   };
 
   const handleBack = () => {
-    if (screen === 0) {
-      // Exit activity — in a real app this would navigate away
-      return;
-    }
+    if (screen === 0) return;
     goTo(screen - 1);
   };
+
+  const renderScreen = (idx: number) =>
+    idx === 0 ? <Screen1 onNext={() => goTo(1)} /> : <Screen2 onBack={() => goTo(0)} />;
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
@@ -213,47 +215,41 @@ const Activity = () => {
         <BackButton onClick={handleBack} />
 
         <div className="flex-1 relative overflow-hidden">
-          {/* Current screen */}
-          <div
-            className="absolute inset-0"
-            style={{
-              transform: isTransitioning
-                ? `translateX(${-direction * 100}%)`
-                : "translateX(0)",
-              transition: isTransitioning ? "transform 600ms ease-in-out" : "none",
-            }}
-          >
-            {screen === 0 ? (
-              <Screen1 onNext={() => goTo(1)} />
-            ) : (
-              <Screen2 onBack={() => goTo(0)} />
-            )}
-          </div>
-
-          {/* Incoming screen */}
-          {isTransitioning && (
+          {/* Outgoing screen */}
+          {prevScreen !== null && (
             <div
+              key={`prev-${prevScreen}`}
               className="absolute inset-0"
               style={{
-                transform: isTransitioning
-                  ? "translateX(0)"
-                  : `translateX(${direction * 100}%)`,
+                transform: `translateX(${-slideDir * 100}%)`,
                 transition: "transform 600ms ease-in-out",
               }}
             >
-              {displayScreen === 0 ? (
-                <Screen1 onNext={() => goTo(1)} />
-              ) : (
-                <Screen2 onBack={() => goTo(0)} />
-              )}
+              {renderScreen(prevScreen)}
             </div>
           )}
+
+          {/* Current screen */}
+          <div
+            key={`cur-${screen}`}
+            className="absolute inset-0"
+            style={{
+              transform: animating ? "translateX(0)" : "translateX(0)",
+              transition: animating ? "transform 600ms ease-in-out" : "none",
+              ...(prevScreen !== null && animating
+                ? { animation: `slideIn${slideDir > 0 ? "Right" : "Left"} 600ms ease-in-out` }
+                : {}),
+            }}
+          >
+            {renderScreen(screen)}
+          </div>
         </div>
 
-        <ProgressDots current={isTransitioning ? displayScreen : screen} total={2} />
+        <ProgressDots current={screen} total={2} />
       </div>
     </div>
   );
 };
 
 export default Activity;
+
